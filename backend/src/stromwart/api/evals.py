@@ -34,8 +34,7 @@ async def eval_summary(container: ContainerDep) -> EvalSummaryResponse:
                 avg_score=round(metric.avg_score, 3),
                 failure_rate=round(metric.failure_rate, 3),
                 dimensions={
-                    key: round(value, 3)
-                    for key, value in metric.dimension_averages.items()
+                    key: round(value, 3) for key, value in metric.dimension_averages.items()
                 },
             )
             for metric in metrics

@@ -1,4 +1,5 @@
 """Fast connectivity probes for LLM providers."""
+
 from __future__ import annotations
 
 from stromwart.api.providers import (
@@ -39,8 +40,7 @@ async def probe_provider(
 
     if model and discovery.models:
         model_found = any(
-            model == listed or listed.startswith(f"{model}:")
-            for listed in discovery.models
+            model == listed or listed.startswith(f"{model}:") for listed in discovery.models
         )
         if not model_found:
             return ProbeOutcome(

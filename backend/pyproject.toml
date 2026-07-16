@@ -43,13 +43,26 @@ target-version = "py312"
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
 
+[tool.ruff.lint.per-file-ignores]
+# FastAPI idiomatic Query()/Depends() defaults
+"src/stromwart/api/**/*.py" = ["B008"]
+"scripts/**/*.py" = ["E501"]
+
 [tool.mypy]
 python_version = "3.12"
 strict = true
 mypy_path = "src"
 
 [[tool.mypy.overrides]]
-module = "joblib"
+module = [
+  "joblib",
+  "pandas",
+  "pandas.*",
+  "mapie",
+  "mapie.*",
+  "sklearn",
+  "sklearn.*",
+]
 ignore_missing_imports = true
 
 [build-system]

@@ -1,4 +1,5 @@
 """Pre-built simulation scenario profiles."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

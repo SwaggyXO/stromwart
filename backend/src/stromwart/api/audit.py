@@ -42,8 +42,7 @@ async def get_audit_trail(
     response_model=list[AuditEventRead],
     summary="List recent audit events",
     description=(
-        "Get the most recent audit events. "
-        "Pass event_id to scope to a specific simulation event."
+        "Get the most recent audit events. Pass event_id to scope to a specific simulation event."
     ),
 )
 async def list_audit_events(

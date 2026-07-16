@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import warnings
-from typing import TypeAlias
 
 import numpy as np
 import pandas as pd
@@ -11,7 +10,7 @@ from lightgbm import LGBMRegressor
 from mapie.regression import SplitConformalRegressor
 from sklearn.base import RegressorMixin
 
-FeatureMatrix: TypeAlias = pd.DataFrame | np.ndarray
+type FeatureMatrix = pd.DataFrame | np.ndarray
 
 _SKLEARN_FEATURE_NAME_WARNING = (
     "X does not have valid feature names, but LGBMRegressor was fitted with feature names"

@@ -17,9 +17,9 @@ class SystemSettings(BaseModel):
     """User-configurable system settings. Persisted to DB or YAML."""
 
     # ─── LLM Provider ─────────────────────────────────────────
-    llm_provider: Literal[
-        "disabled", "groq", "gemini", "ollama", "openai", "anthropic"
-    ] = "disabled"
+    llm_provider: Literal["disabled", "groq", "gemini", "ollama", "openai", "anthropic"] = (
+        "disabled"
+    )
     llm_model: str = ""
     llm_endpoint: str | None = None  # For ollama/lmstudio (e.g., http://localhost:11434)
     llm_api_key: str | None = None  # Encrypted at rest in production

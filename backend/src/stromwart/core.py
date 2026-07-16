@@ -24,9 +24,7 @@ class Settings(BaseSettings):
     )
 
     environment: str = "development"
-    database_url: str = (
-        "postgresql+asyncpg://stromwart:stromwart@localhost:5434/stromwart"
-    )
+    database_url: str = "postgresql+asyncpg://stromwart:stromwart@localhost:5434/stromwart"
     cors_origins: str = "http://localhost:5173"
     llm_provider: LlmProvider = LlmProvider.DISABLED
     llm_base_url: str | None = None
@@ -42,11 +40,7 @@ class Settings(BaseSettings):
 
     @property
     def allowed_origins(self) -> list[str]:
-        return [
-            origin.strip()
-            for origin in self.cors_origins.split(",")
-            if origin.strip()
-        ]
+        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
 
 @lru_cache

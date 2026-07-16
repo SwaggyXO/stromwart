@@ -2,6 +2,7 @@
 Download WaterlooSQoE-IV processed features from the research repository.
 Falls back to generating a realistic proxy if network is unavailable.
 """
+
 import subprocess
 import sys
 from pathlib import Path
@@ -22,8 +23,13 @@ def download() -> None:
     print("Cloning Waterloo-IV research repository...")
     result = subprocess.run(
         [
-            "git", "clone", "--depth=1", "--filter=blob:none", "--sparse",
-            REPO_URL, str(clone_target),
+            "git",
+            "clone",
+            "--depth=1",
+            "--filter=blob:none",
+            "--sparse",
+            REPO_URL,
+            str(clone_target),
         ],
         capture_output=True,
         text=True,

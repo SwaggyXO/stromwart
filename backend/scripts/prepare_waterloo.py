@@ -18,6 +18,7 @@ The Leo-rojo research repo stores processed Waterloo-IV data as .npy arrays
 (7 chunks x 13 fields per video). See Fig_4_and_Table_I/Generate_fig_4a.py
 in the upstream repository for the field layout.
 """
+
 import sys
 from pathlib import Path
 
@@ -98,16 +99,16 @@ def load_from_npy() -> pd.DataFrame | None:
             buffer_mean_ms = float(
                 np.clip(8000 - rebuffer_total_ms * 2 + rng.normal(0, 1000), 500, 20000)
             )
-            buffer_min_ms = int(
-                np.clip(buffer_mean_ms - rng.exponential(2000), 0, None)
-            )
+            buffer_min_ms = int(np.clip(buffer_mean_ms - rng.exponential(2000), 0, None))
 
             base_loss = stall_ratio * 5 + rng.exponential(0.5)
             latest_packet_loss_pct = float(np.clip(base_loss, 0, 100))
 
             mos_raw = float(mos_per_video[video_idx])
-            mos = float(np.clip(1 + (mos_raw / 100) * 4, 1, 5)) if mos_raw > 5 else float(
-                np.clip(mos_raw, 1, 5)
+            mos = (
+                float(np.clip(1 + (mos_raw / 100) * 4, 1, 5))
+                if mos_raw > 5
+                else float(np.clip(mos_raw, 1, 5))
             )
 
             rows.append(

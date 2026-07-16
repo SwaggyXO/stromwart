@@ -49,16 +49,14 @@ class FeatureService:
             window_end=observations[-1].observed_at,
             observation_count=len(observations),
             throughput_mean_kbps=fmean(throughputs),
-            throughput_std_kbps=(
-                pstdev(throughputs) if len(throughputs) > 1 else 0.0
-            ),
+            throughput_std_kbps=(pstdev(throughputs) if len(throughputs) > 1 else 0.0),
             buffer_mean_ms=fmean(buffers),
             buffer_min_ms=min(buffers),
             rebuffer_total_ms=rebuffer_total,
             stall_ratio=rebuffer_total / duration_total,
             downswitch_count=sum(
                 current.bitrate_kbps < previous.bitrate_kbps
-                for previous, current in zip(observations, observations[1:])
+                for previous, current in zip(observations, observations[1:], strict=False)
             ),
             latest_bitrate_kbps=observations[-1].bitrate_kbps,
             latest_packet_loss_pct=observations[-1].packet_loss_pct,

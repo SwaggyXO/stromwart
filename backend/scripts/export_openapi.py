@@ -1,4 +1,5 @@
 """Export the Stromwart OpenAPI schema without starting the server."""
+
 import json
 import os
 import sys

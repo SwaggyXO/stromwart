@@ -47,7 +47,6 @@ class DriftService:
         inclusive: bool,
     ) -> float:
         count = sum(
-            left <= value <= right if inclusive else left <= value < right
-            for value in values
+            left <= value <= right if inclusive else left <= value < right for value in values
         )
         return count / len(values)

@@ -1,4 +1,5 @@
 """Quantile forecaster with Conformalized Quantile Regression."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -79,11 +80,7 @@ class QuantileForecasterModel:
             p10 = float(intervals[0, 0, 0])
             p90 = float(intervals[0, 1, 0])
         else:
-            if (
-                self._model_lower is None
-                or self._model_median is None
-                or self._model_upper is None
-            ):
+            if self._model_lower is None or self._model_median is None or self._model_upper is None:
                 raise RuntimeError("Forecaster has no CQR or quantile models loaded")
             p10 = float(self._model_lower.predict(x)[0])
             p50 = float(self._model_median.predict(x)[0])

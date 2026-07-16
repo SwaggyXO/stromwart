@@ -12,6 +12,7 @@ Usage:
     uv run python scripts/generate_synthetic_data.py  # synthetic augmentation
     uv run python scripts/train_models.py
 """
+
 import sys
 from pathlib import Path
 
@@ -41,12 +42,8 @@ def train_qoe_model(df: pd.DataFrame) -> None:
     X = df[FEATURE_COLS]
     y = df["mos"].values
 
-    X_train, X_temp, y_train, y_temp = train_test_split(
-        X, y, test_size=0.4, random_state=42
-    )
-    X_cal, X_test, y_cal, y_test = train_test_split(
-        X_temp, y_temp, test_size=0.5, random_state=42
-    )
+    X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.4, random_state=42)
+    X_cal, X_test, y_cal, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
 
     print(f"QoE Model — Train: {len(X_train)}, Cal: {len(X_cal)}, Test: {len(X_test)}")
 
@@ -73,9 +70,7 @@ def train_qoe_model(df: pd.DataFrame) -> None:
 
     # Evaluate
     points, intervals = predict_interval(conformal, X_test)
-    coverage = np.mean(
-        (y_test >= intervals[:, 0, 0]) & (y_test <= intervals[:, 1, 0])
-    )
+    coverage = np.mean((y_test >= intervals[:, 0, 0]) & (y_test <= intervals[:, 1, 0]))
     avg_width = np.mean(intervals[:, 1, 0] - intervals[:, 0, 0])
     rmse = np.sqrt(np.mean((points - y_test) ** 2))
 
@@ -121,9 +116,7 @@ def train_forecaster(df: pd.DataFrame) -> None:
     X_train, X_temp, y_train, y_temp = train_test_split(
         X_with_horizon, y, test_size=0.4, random_state=42
     )
-    X_cal, X_test, y_cal, y_test = train_test_split(
-        X_temp, y_temp, test_size=0.5, random_state=42
-    )
+    X_cal, X_test, y_cal, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
 
     print(f"\nForecaster — Train: {len(X_train)}, Cal: {len(X_cal)}, Test: {len(X_test)}")
 

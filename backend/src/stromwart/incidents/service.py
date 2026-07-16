@@ -46,9 +46,7 @@ class IncidentService:
 
             existing = await repository.active_incident(active_key)
             if existing is not None:
-                existing.evidence_ids = list(
-                    dict.fromkeys(existing.evidence_ids + alert_ids)
-                )
+                existing.evidence_ids = list(dict.fromkeys(existing.evidence_ids + alert_ids))
                 await uow.flush()
                 return existing, False, len(alert_ids)
 
@@ -66,18 +64,13 @@ class IncidentService:
                 existing = await repository.active_incident(active_key)
                 if existing is None:
                     raise
-                existing.evidence_ids = list(
-                    dict.fromkeys(existing.evidence_ids + alert_ids)
-                )
+                existing.evidence_ids = list(dict.fromkeys(existing.evidence_ids + alert_ids))
                 await uow.flush()
                 return existing, False, len(alert_ids)
 
     @staticmethod
     def _slice_key(affected_slice: dict[str, str | None]) -> str:
-        return "|".join(
-            f"{key}={value or '_'}"
-            for key, value in sorted(affected_slice.items())
-        )
+        return "|".join(f"{key}={value or '_'}" for key, value in sorted(affected_slice.items()))
 
     @staticmethod
     def _highest(matches: list[RuleMatch]) -> Severity:

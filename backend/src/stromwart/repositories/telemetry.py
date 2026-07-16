@@ -1,8 +1,8 @@
 import hashlib
 import json
-from datetime import datetime, timezone
-from typing import cast
 from dataclasses import dataclass
+from datetime import UTC, datetime
+from typing import cast
 from uuid import UUID
 
 from sqlalchemy import func, select
@@ -36,37 +36,36 @@ class TelemetryRepository:
         return row
 
     async def list_events(self, limit: int = 50) -> list[EventRow]:
-        statement = (
-            select(EventRow)
-            .order_by(EventRow.starts_at.desc())
-            .limit(limit)
-        )
+        statement = select(EventRow).order_by(EventRow.starts_at.desc()).limit(limit)
         return list((await self._session.scalars(statement)).all())
 
     async def get_active_event(self) -> EventRow | None:
         """Prefer an unfinished event; otherwise return the most recently started."""
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         active = cast(
             EventRow | None,
             await self._session.scalar(
-            select(EventRow)
-            .where(EventRow.starts_at <= now)
-            .where((EventRow.ends_at.is_(None)) | (EventRow.ends_at > now))
-            .order_by(EventRow.starts_at.desc())
-            .limit(1)
+                select(EventRow)
+                .where(EventRow.starts_at <= now)
+                .where((EventRow.ends_at.is_(None)) | (EventRow.ends_at > now))
+                .order_by(EventRow.starts_at.desc())
+                .limit(1)
             ),
         )
         if active is not None:
             return active
 
-        return cast(EventRow | None, await self._session.scalar(
-            select(EventRow).order_by(EventRow.starts_at.desc()).limit(1)
-        ))
+        return cast(
+            EventRow | None,
+            await self._session.scalar(
+                select(EventRow).order_by(EventRow.starts_at.desc()).limit(1)
+            ),
+        )
 
     async def end_event(self, event_id: str) -> None:
         row = await self._session.get(EventRow, event_id)
         if row is not None and row.ends_at is None:
-            row.ends_at = datetime.now(timezone.utc)
+            row.ends_at = datetime.now(UTC)
             await self._session.flush()
 
     async def get_event(self, event_id: UUID) -> EventRow:
@@ -96,9 +95,9 @@ class TelemetryRepository:
         return row
 
     async def timestamp_before(
-    self,
-    session_id: UUID,
-    sequence: int,
+        self,
+        session_id: UUID,
+        sequence: int,
     ) -> datetime | None:
         statement = (
             select(ObservationRow.observed_at)
@@ -110,7 +109,6 @@ class TelemetryRepository:
             .limit(1)
         )
         return cast(datetime | None, await self._session.scalar(statement))
-
 
     async def timestamp_after(
         self,
@@ -139,9 +137,7 @@ class TelemetryRepository:
 
     async def count_sessions_for_event(self, event_id: str) -> SessionCounts:
         total = await self._session.scalar(
-            select(func.count())
-            .select_from(SessionRow)
-            .where(SessionRow.event_id == event_id)
+            select(func.count()).select_from(SessionRow).where(SessionRow.event_id == event_id)
         )
         active = await self._session.scalar(
             select(func.count())
@@ -193,9 +189,7 @@ class TelemetryRepository:
 
         if existing is not None:
             if existing.payload_hash != payload_hash:
-                raise ConflictError(
-                    "sequence already exists with a different telemetry payload"
-                )
+                raise ConflictError("sequence already exists with a different telemetry payload")
             return existing, True
 
         row = ObservationRow(

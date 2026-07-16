@@ -69,6 +69,19 @@ export const test = base.extend<{ authMode: AuthMode }>({
           event_id: null,
         });
       }
+      if (method === 'GET' && path === '/simulation/scenarios') {
+        return json([
+          {
+            id: 'fifa_wc_ger_jpn',
+            name: 'FIFA WC Demo',
+            description: 'Mock scenario',
+            duration_minutes: 12,
+            category: 'sports',
+            sessions_peak: 50000,
+            phase_count: 4,
+          },
+        ]);
+      }
       if (method === 'GET' && path === '/evals/summary') return json({ agents: [] });
       if (method === 'POST' && /\/proposals\/[^/]+\/simulate$/.test(path)) {
         return json({

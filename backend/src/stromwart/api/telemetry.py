@@ -12,8 +12,8 @@ from stromwart.application.dependencies import ContainerDep, UnitOfWorkDep
 from stromwart.contracts.common import EventCreate, EventRead, SessionCreate, SessionRead
 from stromwart.contracts.features import FeatureRead
 from stromwart.contracts.telemetry import ObservationCreate, ObservationRead
-from stromwart.repositories.telemetry import TelemetryRepository
 from stromwart.persistence import ObservationRow
+from stromwart.repositories.telemetry import TelemetryRepository
 
 router = APIRouter(tags=["telemetry"])
 

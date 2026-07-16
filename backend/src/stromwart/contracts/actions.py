@@ -36,15 +36,14 @@ class ProposalCreate(ApiModel):
     expected_effect: str = Field(
         min_length=1, max_length=1000, description="Projected outcome description"
     )
-    confidence: float = Field(
-        ge=0, le=1, description="Analyst confidence in the recommendation"
-    )
+    confidence: float = Field(ge=0, le=1, description="Analyst confidence in the recommendation")
     risk_score: float = Field(ge=0, le=1, description="Estimated risk of the action itself")
     evidence_ids: list[UUID] = Field(
         min_length=1, description="Alert/evidence IDs supporting this proposal"
     )
     prediction_interval_width: float | None = Field(
-        default=None, ge=0,
+        default=None,
+        ge=0,
         description="Width of the QoE prediction interval (used by guardrails)",
     )
     drift_active: bool = Field(

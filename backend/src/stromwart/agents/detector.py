@@ -44,9 +44,7 @@ class DetectorAgent(BaseAgent):
         # Step 3: Analyze and produce detection result
         telemetry = history[0].observation.output if history[0].observation else {}
         predictions = (
-            history[1].observation.output
-            if len(history) > 1 and history[1].observation
-            else {}
+            history[1].observation.output if len(history) > 1 and history[1].observation else {}
         )
 
         anomalies = self._detect_anomalies(telemetry, predictions, state)
@@ -74,37 +72,43 @@ class DetectorAgent(BaseAgent):
         # Threshold-based detection
         mos = telemetry.get("avg_mos", 0)
         if isinstance(mos, (int, float)) and mos < 3.5:
-            anomalies.append({
-                "type": "threshold_breach",
-                "metric": "avg_mos",
-                "value": mos,
-                "threshold": 3.5,
-                "severity": "high" if mos < 3.0 else "medium",
-            })
+            anomalies.append(
+                {
+                    "type": "threshold_breach",
+                    "metric": "avg_mos",
+                    "value": mos,
+                    "threshold": 3.5,
+                    "severity": "high" if mos < 3.0 else "medium",
+                }
+            )
 
         buffer_ratio = telemetry.get("buffer_ratio", 0)
         if isinstance(buffer_ratio, (int, float)) and buffer_ratio > 3.0:
-            anomalies.append({
-                "type": "threshold_breach",
-                "metric": "buffer_ratio",
-                "value": buffer_ratio,
-                "threshold": 3.0,
-                "severity": "high" if buffer_ratio > 5.0 else "medium",
-            })
+            anomalies.append(
+                {
+                    "type": "threshold_breach",
+                    "metric": "buffer_ratio",
+                    "value": buffer_ratio,
+                    "threshold": 3.0,
+                    "severity": "high" if buffer_ratio > 5.0 else "medium",
+                }
+            )
 
         # Prediction-based detection (compare actual vs predicted)
         predicted_mos = predictions.get("predicted_mos")
         if predicted_mos is not None and isinstance(mos, (int, float)) and mos > 0:
             residual = abs(mos - predicted_mos)
             if residual > 0.5:
-                anomalies.append({
-                    "type": "prediction_deviation",
-                    "metric": "mos_residual",
-                    "actual": mos,
-                    "predicted": predicted_mos,
-                    "residual": residual,
-                    "severity": "high" if residual > 1.0 else "medium",
-                })
+                anomalies.append(
+                    {
+                        "type": "prediction_deviation",
+                        "metric": "mos_residual",
+                        "actual": mos,
+                        "predicted": predicted_mos,
+                        "residual": residual,
+                        "severity": "high" if residual > 1.0 else "medium",
+                    }
+                )
 
         return anomalies
 

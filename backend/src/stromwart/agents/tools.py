@@ -34,8 +34,7 @@ class ToolGateway:
 
     def tool_descriptions(self) -> list[dict[str, str]]:
         return [
-            {"name": tool.name, "description": tool.description}
-            for tool in self._tools.values()
+            {"name": tool.name, "description": tool.description} for tool in self._tools.values()
         ]
 
     async def call(

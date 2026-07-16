@@ -1,8 +1,9 @@
 """Generate synthetic telemetry observations for simulation scenarios."""
+
 from __future__ import annotations
 
 import random
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from uuid import UUID, uuid4
 
 from stromwart.contracts.common import SourceType
@@ -75,7 +76,7 @@ def _generate_single_observation(
 
     return ObservationCreate(
         session_id=session_id,
-        observed_at=timestamp.astimezone(timezone.utc),
+        observed_at=timestamp.astimezone(UTC),
         sequence=sequence,
         duration_ms=duration_ms,
         bitrate_kbps=bitrate,
@@ -87,8 +88,7 @@ def _generate_single_observation(
         source_type=SourceType.SYNTHETIC,
         metadata={
             "cdn_node": (
-                f"edge-{random.choice(['us-east', 'eu-west', 'ap-south'])}"
-                f"-{random.randint(1, 8)}"
+                f"edge-{random.choice(['us-east', 'eu-west', 'ap-south'])}-{random.randint(1, 8)}"
             ),
             "simulated_mos": round(mos, 2),
         },
@@ -99,7 +99,7 @@ def create_session_pool(event_id: str, count: int) -> list[dict[str, str]]:
     """Create session registration payloads."""
     regions = ["us-east", "eu-west", "ap-south", "us-west", "eu-central"]
     clients = ["web", "ios", "android", "smart-tv", "roku"]
-    started_at = datetime.now(timezone.utc).isoformat()
+    started_at = datetime.now(UTC).isoformat()
 
     return [
         {

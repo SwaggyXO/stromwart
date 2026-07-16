@@ -80,11 +80,13 @@ class EvalRunner:
 
             for agent_name, spans in trace.agent_spans.items():
                 agent_data.setdefault(agent_name, [])
-                agent_data[agent_name].append({
-                    "latency_ms": sum(span.duration_ms for span in spans),
-                    "success": all(span.status == "ok" for span in spans),
-                    "scores": {score.dimension: score.score for score in summary.scores},
-                })
+                agent_data[agent_name].append(
+                    {
+                        "latency_ms": sum(span.duration_ms for span in spans),
+                        "success": all(span.status == "ok" for span in spans),
+                        "scores": {score.dimension: score.score for score in summary.scores},
+                    }
+                )
 
         metrics: list[AgentEvalMetrics] = []
         for agent_name, runs in agent_data.items():

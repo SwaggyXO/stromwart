@@ -1,4 +1,3 @@
-
 from sqlalchemy.exc import IntegrityError
 
 from stromwart.contracts.telemetry import ObservationCreate
@@ -70,9 +69,7 @@ class IngestionService:
 
         if existing is not None:
             if existing.payload_hash != payload_hash:
-                raise ConflictError(
-                    "sequence already exists with a different telemetry payload"
-                )
+                raise ConflictError("sequence already exists with a different telemetry payload")
             return existing, True
 
         try:
@@ -89,6 +86,6 @@ class IngestionService:
             if existing.payload_hash != payload_hash:
                 raise ConflictError(
                     "sequence already exists with a different telemetry payload"
-                )
+                ) from None
 
             return existing, True

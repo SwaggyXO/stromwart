@@ -44,9 +44,7 @@ class OpenAiCompatibleProvider:
                         "content": json.dumps(
                             {
                                 "incident": incident_context,
-                                "evidence": [
-                                    item.model_dump(mode="json") for item in evidence
-                                ],
+                                "evidence": [item.model_dump(mode="json") for item in evidence],
                             }
                         ),
                     },

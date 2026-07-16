@@ -1,4 +1,5 @@
 """Setup guides for LLM providers."""
+
 from __future__ import annotations
 
 PROVIDER_GUIDES: dict[str, dict[str, str]] = {

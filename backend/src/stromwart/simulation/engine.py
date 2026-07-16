@@ -1,10 +1,11 @@
 """Simulation engine — orchestrates scenario execution."""
+
 from __future__ import annotations
 
 import asyncio
 import logging
-from datetime import datetime, timedelta, timezone
-from enum import Enum
+from datetime import UTC, datetime, timedelta
+from enum import StrEnum
 from typing import TYPE_CHECKING
 from uuid import UUID
 
@@ -78,7 +79,8 @@ def _best_diagnostician_observation(state: CognitiveState) -> dict[str, object] 
 
     def rank(obs: dict[str, object]) -> tuple[float, float]:
         hypothesis = str(obs.get("hypothesis", ""))
-        confidence = float(obs.get("confidence", 0) or 0)
+        raw_conf = obs.get("confidence", 0)
+        confidence = float(raw_conf) if isinstance(raw_conf, (int, float, str)) else 0.0
         if hypothesis == "Unknown root cause":
             return (-1.0, confidence)
         return (confidence, confidence)
@@ -100,7 +102,7 @@ def compute_simulation_progress(
     return min(max(sim_minute / total_minutes, 0.0), 1.0)
 
 
-class SimulationStatus(str, Enum):
+class SimulationStatus(StrEnum):
     IDLE = "idle"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -120,7 +122,8 @@ def _sanitize_target_scope(
             scope[key] = value
     if event_id and "event_id" not in scope:
         scope["event_id"] = event_id
-    if not isinstance(scope.get("session_count"), int) or int(scope["session_count"]) < 0:
+    session_count_value = scope.get("session_count")
+    if not isinstance(session_count_value, int) or session_count_value < 0:
         scope["session_count"] = session_count
     return scope
 
@@ -192,7 +195,7 @@ class SimulationEngine:
                 EventCreate(
                     name=scenario.name,
                     content_type=scenario.category,
-                    starts_at=datetime.now(timezone.utc),
+                    starts_at=datetime.now(UTC),
                 )
             )
             self._event_id = event_row.id
@@ -253,7 +256,7 @@ class SimulationEngine:
             self._progress = min(1.0, 0.5 / total_minutes)
 
             sequence_counters = dict.fromkeys(session_ids, 0)
-            sim_start = datetime.now(timezone.utc)
+            sim_start = datetime.now(UTC)
 
             for phase in scenario.phases:
                 self._current_phase = phase.description
@@ -294,9 +297,7 @@ class SimulationEngine:
                     await asyncio.sleep(phase_duration_real / batch_count)
 
                 if phase.mos_range[0] < 3.5:
-                    incident_created = await self._trigger_detection(
-                        event_id, session_ids, phase
-                    )
+                    incident_created = await self._trigger_detection(event_id, session_ids, phase)
                     if incident_created:
                         await self._trigger_supervisor(event_id, cycles=3)
 
@@ -355,7 +356,7 @@ class SimulationEngine:
 
         if phase is not None:
             try:
-                now = datetime.now(timezone.utc)
+                now = datetime.now(UTC)
                 mos_mid = (phase.mos_range[0] + phase.mos_range[1]) / 2
                 stall_mid = (phase.stall_ratio[0] + phase.stall_ratio[1]) / 2
                 pkt_mid = (phase.packet_loss_pct[0] + phase.packet_loss_pct[1]) / 2
@@ -578,9 +579,7 @@ class SimulationEngine:
 
             await self._record_eval_trace(incident_id, state)
 
-            has_diagnosis = any(
-                step.agent_name == "diagnostician" for step in state.step_history
-            )
+            has_diagnosis = any(step.agent_name == "diagnostician" for step in state.step_history)
             if has_diagnosis and event_id_for_analyst and evidence_for_analyst:
                 await self._run_llm_analyst_if_enabled(
                     incident_id,
@@ -633,15 +632,19 @@ class SimulationEngine:
                 str(prop.get("action_type", "investigate_only")),
                 "investigate_only",
             )
-            session_count = int(
-                state.active_sessions_count or self._sessions_provisioned or 100
+            session_count = int(state.active_sessions_count or self._sessions_provisioned or 100)
+            raw_scope = prop.get("target_scope", {})
+            scope_in: dict[str, object] = (
+                {str(k): v for k, v in raw_scope.items()} if isinstance(raw_scope, dict) else {}
             )
             target_scope = _sanitize_target_scope(
-                dict(prop.get("target_scope", {})),
+                scope_in,
                 event_id=state.event_id,
                 session_count=session_count,
             )
 
+            raw_confidence = prop.get("confidence", 0.75)
+            raw_risk = prop.get("risk_score", 0.15)
             proposal = ProposalCreate(
                 action_type=action_type,
                 target_scope=target_scope,
@@ -649,13 +652,13 @@ class SimulationEngine:
                 expected_effect=str(
                     prop.get("expected_effect", "Restore QoE for affected viewers")
                 ),
-                confidence=float(prop.get("confidence", 0.75)),
-                risk_score=float(prop.get("risk_score", 0.15)),
+                confidence=(
+                    float(raw_confidence) if isinstance(raw_confidence, (int, float, str)) else 0.75
+                ),
+                risk_score=(float(raw_risk) if isinstance(raw_risk, (int, float, str)) else 0.15),
                 evidence_ids=[UUID(eid) for eid in row.evidence_ids[:3]],
             )
-            evidence_is_valid = set(map(str, proposal.evidence_ids)).issubset(
-                set(row.evidence_ids)
-            )
+            evidence_is_valid = set(map(str, proposal.evidence_ids)).issubset(set(row.evidence_ids))
             decision = self._container.policies.evaluate(proposal, evidence_is_valid)
             proposal_row = await ActionRepository(uow.session).create(
                 UUID(incident_id),

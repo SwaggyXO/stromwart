@@ -1,4 +1,5 @@
 """Verify RCA fix plan: unified session counts, incident audit, agent runs."""
+
 from __future__ import annotations
 
 import json
@@ -85,7 +86,9 @@ def main() -> int:
     else:
         raise AssertionError("Simulation did not complete within timeout")
 
-    assert isinstance(incidents, list) and len(incidents) == 1, f"Expected 1 incident, got {incidents}"
+    assert isinstance(incidents, list) and len(incidents) == 1, (
+        f"Expected 1 incident, got {incidents}"
+    )
     print("CHECK: single open incident PASS")
 
     incident_id = incidents[0]["id"]
@@ -110,9 +113,7 @@ def main() -> int:
     assert isinstance(agent_runs, list) and len(agent_runs) > 0, "No agent runs"
     print(f"CHECK: {len(agent_runs)} agent runs PASS")
 
-    supervisor_steps = [
-        a for a in audit if a.get("artifact_type") == "supervisor_step"
-    ]
+    supervisor_steps = [a for a in audit if a.get("artifact_type") == "supervisor_step"]
     assert len(supervisor_steps) > 0, "No supervisor_step audit entries"
     print(f"CHECK: {len(supervisor_steps)} supervisor steps PASS")
 
@@ -160,17 +161,13 @@ def main() -> int:
         print("CHECK: simulate proposal approve PASS")
 
     verifier_steps = [
-        s
-        for s in supervisor_steps
-        if s.get("payload", {}).get("agent") == "verifier"
+        s for s in supervisor_steps if s.get("payload", {}).get("agent") == "verifier"
     ]
     assert len(verifier_steps) >= 1, "Verifier agent did not run"
     print(f"CHECK: {len(verifier_steps)} verifier step(s) PASS")
 
     reflection_steps = [
-        s
-        for s in supervisor_steps
-        if isinstance(s.get("payload", {}).get("step_reflection"), dict)
+        s for s in supervisor_steps if isinstance(s.get("payload", {}).get("step_reflection"), dict)
     ]
     assert len(reflection_steps) >= 1, "No per-step reflection in audit"
     print(f"CHECK: {len(reflection_steps)} step reflection(s) PASS")
@@ -188,8 +185,7 @@ def main() -> int:
             acked = [
                 a
                 for a in audit_ack
-                if isinstance(a, dict)
-                and a.get("payload", {}).get("transition") == "acknowledged"
+                if isinstance(a, dict) and a.get("payload", {}).get("transition") == "acknowledged"
             ]
             assert len(acked) >= 1, "Alert acknowledge not in audit trail"
             print("CHECK: alert acknowledge audit PASS")

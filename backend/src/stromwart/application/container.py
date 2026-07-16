@@ -160,7 +160,7 @@ class Container:
         )
 
     @cached_property
-    def simulation_engine(self) -> "SimulationEngine":
+    def simulation_engine(self) -> SimulationEngine:
         from stromwart.simulation.engine import SimulationEngine
 
         return SimulationEngine(self)

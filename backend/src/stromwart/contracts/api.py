@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar
+from typing import TypeVar
 
 from stromwart.contracts.common import ApiModel
 
@@ -15,6 +15,6 @@ class ErrorResponse(ApiModel):
     error: ErrorBody
 
 
-class Page(ApiModel, Generic[Item]):
+class Page[Item](ApiModel):
     items: list[Item]
     next_cursor: str | None = None

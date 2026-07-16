@@ -105,11 +105,13 @@ class AgentTracer:
 
     def add_event(self, name: str, attributes: dict[str, Any] | None = None) -> None:
         if self._span_stack:
-            self._span_stack[-1].events.append({
-                "name": name,
-                "timestamp": time.monotonic(),
-                "attributes": attributes or {},
-            })
+            self._span_stack[-1].events.append(
+                {
+                    "name": name,
+                    "timestamp": time.monotonic(),
+                    "attributes": attributes or {},
+                }
+            )
 
     def end_trace(self) -> AgentTrace | None:
         trace = self._active_trace

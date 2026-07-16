@@ -64,9 +64,7 @@ class AuditRepository:
 
         inc_ids_q = select(IncidentRow.id).where(IncidentRow.event_id == event_id)
         alert_ids_q = select(AlertRow.id).where(AlertRow.event_id == event_id)
-        proposal_ids_q = select(ProposalRow.id).where(
-            ProposalRow.incident_id.in_(inc_ids_q)
-        )
+        proposal_ids_q = select(ProposalRow.id).where(ProposalRow.incident_id.in_(inc_ids_q))
 
         result = await self._session.execute(
             select(AuditRow)

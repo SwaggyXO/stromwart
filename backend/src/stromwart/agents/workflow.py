@@ -72,8 +72,7 @@ class AgentWorkflow:
                 raise InvalidStateError("agent run cannot be analyzed in current state")
 
             evidence = [
-                ToolResult.model_validate(item)
-                for item in run.workflow_data["tool_results"]
+                ToolResult.model_validate(item) for item in run.workflow_data["tool_results"]
             ]
             finding = await self._provider.analyze(incident_context, evidence)
             reflection = self._critic.review(finding, evidence)
@@ -155,9 +154,7 @@ class AgentWorkflow:
             data = dict(run.workflow_data)
             data["human_feedback"] = feedback.model_dump(mode="json")
             state = (
-                AgentRunState.COMPLETED.value
-                if feedback.approved
-                else AgentRunState.REJECTED.value
+                AgentRunState.COMPLETED.value if feedback.approved else AgentRunState.REJECTED.value
             )
             await runs.update(run, state, data)
 

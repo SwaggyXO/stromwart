@@ -68,8 +68,7 @@ class MCPToolClient:
 
     def list_available_tools(self) -> list[dict[str, str]]:
         return [
-            {"name": tool.name, "description": tool.description}
-            for tool in self._tools.values()
+            {"name": tool.name, "description": tool.description} for tool in self._tools.values()
         ]
 
     async def close(self) -> None:

@@ -56,9 +56,7 @@ class DiagnosticianAgent(BaseAgent):
         # Step 3: Produce diagnosis
         features = history[0].observation.output if history[0].observation else {}
         topology = (
-            history[1].observation.output
-            if len(history) > 1 and history[1].observation
-            else {}
+            history[1].observation.output if len(history) > 1 and history[1].observation else {}
         )
 
         diagnosis = self._analyze_root_cause(features, topology, state, reflection)

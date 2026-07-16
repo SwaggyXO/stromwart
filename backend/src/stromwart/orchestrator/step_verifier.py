@@ -1,8 +1,8 @@
 """Lightweight per-agent step verification after OODA dispatch."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
 
 from stromwart.agents.base import AgentResult
 

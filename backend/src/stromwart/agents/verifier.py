@@ -49,9 +49,7 @@ class VerifierAgent(BaseAgent):
     ) -> dict[str, Any]:
         """Compare pre-action anomalies against post-action metrics."""
         pre_anomalies = (
-            state.detection_result.get("anomalies", [])
-            if state.detection_result
-            else []
+            state.detection_result.get("anomalies", []) if state.detection_result else []
         )
 
         passed = True

@@ -1,4 +1,5 @@
 """Verification script for pack_demo_e2e_fix."""
+
 from __future__ import annotations
 
 import json
@@ -81,7 +82,9 @@ def main() -> int:
         sim = get("/simulation/status")
         progress = sim.get("progress", 0)
         phase = sim.get("current_phase", "")[:60]
-        print(f"  attempt {attempt + 1}: {len(incidents)} incidents, progress={progress:.2f}, phase={phase}")
+        print(
+            f"  attempt {attempt + 1}: {len(incidents)} incidents, progress={progress:.2f}, phase={phase}"
+        )
         if len(incidents) >= 1:
             break
     assert len(incidents) >= 1, "No incidents after 150s"

@@ -41,13 +41,15 @@ async def _predictions_handler(args: dict) -> dict:
 
 
 def _build_supervisor() -> Supervisor:
-    gateway = ToolGateway([
-        ToolSpec("telemetry", "telemetry", _handler),
-        ToolSpec("features", "features", _handler),
-        ToolSpec("predictions", "predictions", _predictions_handler),
-        ToolSpec("topology", "topology", _handler),
-        ToolSpec("runbook", "runbook", _handler),
-    ])
+    gateway = ToolGateway(
+        [
+            ToolSpec("telemetry", "telemetry", _handler),
+            ToolSpec("features", "features", _handler),
+            ToolSpec("predictions", "predictions", _predictions_handler),
+            ToolSpec("topology", "topology", _handler),
+            ToolSpec("runbook", "runbook", _handler),
+        ]
+    )
     guardrails = AgentGuardrails()
     budget = Budget(max_steps=10, max_seconds=30.0)
     agents = {
@@ -111,10 +113,8 @@ async def main() -> None:
     assert len(scores) == 5
 
     # Guardrails block consecutive failures
-    guardrails = AgentGuardrails(
-        policies={"detector": GuardrailPolicy(max_consecutive_failures=2)}
-    )
-    from stromwart.agents.base import AgentAction, ActionKind, Observation
+    guardrails = AgentGuardrails(policies={"detector": GuardrailPolicy(max_consecutive_failures=2)})
+    from stromwart.agents.base import ActionKind, AgentAction, Observation
 
     history = [
         Step(

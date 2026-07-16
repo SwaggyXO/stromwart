@@ -54,7 +54,9 @@ class ScoreResult(ApiModel):
         description="Upper bound of conformal prediction interval",
     )
     confidence: float | None = Field(
-        default=None, ge=0, le=1,
+        default=None,
+        ge=0,
+        le=1,
         description="Model confidence (derived from interval width)",
     )
 
@@ -102,11 +104,7 @@ class ForecastResult(ApiModel):
     model_config = ConfigDict(
         extra="forbid",
         populate_by_name=True,
-        json_schema_extra={
-            "examples": [
-                {"p10": 0.12, "p50": 0.34, "p90": 0.61}
-            ]
-        },
+        json_schema_extra={"examples": [{"p10": 0.12, "p50": 0.34, "p90": 0.61}]},
     )
 
     @model_validator(mode="after")

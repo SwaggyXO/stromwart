@@ -3,7 +3,6 @@ from uuid import UUID
 
 from stromwart.contracts.agents import AnalystFinding, ToolCall, ToolResult
 
-
 Planner = Callable[[dict[str, object], list[ToolResult]], Awaitable[ToolCall | AnalystFinding]]
 
 
@@ -11,11 +10,7 @@ def validate_evidence(
     response_evidence: list[UUID],
     tool_results: list[ToolResult],
 ) -> bool:
-    available = {
-        evidence_id
-        for result in tool_results
-        for evidence_id in result.evidence_ids
-    }
+    available = {evidence_id for result in tool_results for evidence_id in result.evidence_ids}
     return bool(response_evidence) and set(response_evidence).issubset(available)
 
 

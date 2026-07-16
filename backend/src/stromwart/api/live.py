@@ -65,11 +65,7 @@ async def event_kpis(event_id: UUID, container: ContainerDep) -> list[KPISnapsho
         incidents = await incidents_repo.incidents_for_event(str(event_id), limit=200)
 
     open_incidents = sum(1 for row in incidents if row.state != "resolved")
-    critical = sum(
-        1
-        for row in incidents
-        if row.state != "resolved" and row.severity == "critical"
-    )
+    critical = sum(1 for row in incidents if row.state != "resolved" and row.severity == "critical")
 
     return [
         KPISnapshot(
@@ -83,9 +79,7 @@ async def event_kpis(event_id: UUID, container: ContainerDep) -> list[KPISnapsho
             value=open_incidents,
             trend="up" if open_incidents > 0 else "stable",
             status=(
-                "good"
-                if open_incidents == 0
-                else "critical" if open_incidents > 2 else "warning"
+                "good" if open_incidents == 0 else "critical" if open_incidents > 2 else "warning"
             ),
         ),
         KPISnapshot(

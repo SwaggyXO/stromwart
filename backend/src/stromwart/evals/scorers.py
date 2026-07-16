@@ -63,9 +63,7 @@ class DeterministicScorer:
     def score_evidence_grounding(self, trace: AgentTrace) -> ScoreResult:
         """Check if diagnosis/outputs cite evidence from tool calls."""
         tool_spans = [
-            span
-            for span in trace.spans
-            if "tool" in span.name.lower() and span.status == "ok"
+            span for span in trace.spans if "tool" in span.name.lower() and span.status == "ok"
         ]
         final_spans = [span for span in trace.spans if "final" in span.name.lower()]
 

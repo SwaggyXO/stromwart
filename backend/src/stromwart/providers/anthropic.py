@@ -44,9 +44,7 @@ class AnthropicProvider:
                         "content": json.dumps(
                             {
                                 "incident": incident_context,
-                                "evidence": [
-                                    item.model_dump(mode="json") for item in evidence
-                                ],
+                                "evidence": [item.model_dump(mode="json") for item in evidence],
                             }
                         ),
                     }
@@ -55,9 +53,7 @@ class AnthropicProvider:
         )
 
         if response.is_error:
-            raise ProviderUnavailableError(
-                f"anthropic provider returned {response.status_code}"
-            )
+            raise ProviderUnavailableError(f"anthropic provider returned {response.status_code}")
 
         try:
             content = response.json()["content"][0]["text"]
