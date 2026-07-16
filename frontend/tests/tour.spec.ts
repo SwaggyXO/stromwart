@@ -15,19 +15,56 @@ test.describe('Onboarding Tour', () => {
     await page.route('**/api/v1/**', async (route) => {
       const url = new URL(route.request().url());
       const path = url.pathname;
-
-      if (path.includes('/events/active')) {
-        return route.fulfill({
+      const json = (body: unknown) =>
+        route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify({
-            id: 'evt_001',
-            name: 'Test Event',
-            starts_at: '2026-07-15T20:00:00Z',
-            content_type: 'sports',
-            ends_at: null,
-          }),
+          body: JSON.stringify(body),
         });
+
+      // Tour targets live dashboard panels; eventId only resolves when sim is engaged.
+      if (path.includes('/simulation/status')) {
+        return json({
+          status: 'running',
+          scenario_id: 'cdn_regional_outage',
+          progress: 0.3,
+          current_phase: 'Degradation',
+          event_id: 'evt_001',
+        });
+      }
+      if (path.includes('/simulation/scenarios')) {
+        return json([
+          {
+            id: 'cdn_regional_outage',
+            name: 'Test Event',
+            description: 'Tour demo',
+            duration_minutes: 10,
+            category: 'sports',
+            sessions_peak: 50000,
+            phase_count: 4,
+          },
+        ]);
+      }
+      if (path.includes('/events/active')) {
+        return json({
+          id: 'evt_001',
+          name: 'Test Event',
+          starts_at: '2026-07-15T20:00:00Z',
+          content_type: 'sports',
+          ends_at: null,
+        });
+      }
+      if (path.includes('/kpis')) {
+        return json([
+          {
+            label: 'MOS Score',
+            value: 4.21,
+            unit: '',
+            delta: 0.05,
+            trend: 'up',
+            status: 'good',
+          },
+        ]);
       }
       if (path.includes('/stream')) {
         return route.fulfill({
@@ -37,17 +74,9 @@ test.describe('Onboarding Tour', () => {
         });
       }
       if (path.includes('/evals/summary')) {
-        return route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({ agents: [] }),
-        });
+        return json({ agents: [] });
       }
-      return route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: '[]',
-      });
+      return json([]);
     });
   });
 

@@ -10,7 +10,27 @@ from starlette.testclient import TestClient
 
 from stromwart.app import create_app
 from stromwart.contracts.common import SourceType
+from stromwart.contracts.features import FeatureVector
+from stromwart.contracts.modeling import ForecastResult, ModelIdentity
 from stromwart.contracts.telemetry import ObservationCreate
+
+
+class _StubForecastModel:
+    """Deterministic forecaster so CI does not need artifacts/*.joblib."""
+
+    async def forecast(
+        self,
+        features: FeatureVector,
+        metric_name: str,
+        horizon_seconds: int,
+    ) -> ForecastResult:
+        del features, metric_name
+        base = min(0.9, 0.1 + horizon_seconds / 3_600)
+        return ForecastResult(
+            p10=round(base * 0.5, 4),
+            p50=round(base * 0.7, 4),
+            p90=round(base, 4),
+        )
 
 
 def _observation(session_id: str, sequence: int) -> dict[str, object]:
@@ -30,7 +50,16 @@ def _observation(session_id: str, sequence: int) -> dict[str, object]:
 
 @pytest.fixture
 def client() -> TestClient:
-    with TestClient(create_app()) as test_client:
+    app = create_app()
+    with TestClient(app) as test_client:
+        app.state.container.models.register_forecast(
+            ModelIdentity(
+                name="quantile_forecaster",
+                version="v1",
+                feature_schema_version="telemetry-v1",
+            ),
+            _StubForecastModel(),
+        )
         yield test_client
 
 

@@ -10,17 +10,13 @@ test.describe('SSE Real-Time Updates', () => {
       }
     });
 
-    await page.addInitScript(() => {
-      localStorage.setItem('stromwart-active-event-id', 'evt_001');
-    });
-
     await page.goto('/');
     await expect(page.locator('[data-tour="kpi-panel"]')).toBeVisible({ timeout: 10_000 });
     await page.waitForTimeout(2000);
 
     expect(sseRequests.length).toBeGreaterThan(0);
     expect(sseRequests[0]).toMatch(/events\/[^/]+\/stream/);
-    // Active event id may come from VITE_ACTIVE_EVENT_ID, query, or localStorage
+    // Event id comes from engaged simulation status (fixtures default to running)
     expect(sseRequests.some((u) => /\/events\/[^/]+\/stream/.test(u))).toBe(true);
   });
 });

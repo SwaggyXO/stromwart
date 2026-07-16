@@ -137,6 +137,11 @@ const mockSettings = {
   eval_enabled: true,
   eval_llm_judge_enabled: false,
   eval_trace_sample_rate: 1.0,
+  data_sources: [
+    { type: 'simulation', label: 'Demo Scenario', active: true },
+    { type: 'prometheus', label: 'Prometheus', active: false },
+    { type: 'websocket', label: 'Custom WebSocket', active: false },
+  ],
 };
 
 const mockProviders = [
@@ -222,11 +227,11 @@ export const handlers = [
   ),
   http.get(`${BASE}/simulation/status`, () =>
     HttpResponse.json({
-      status: 'idle',
-      scenario_id: null,
-      progress: 0,
-      current_phase: '',
-      event_id: null,
+      status: 'running',
+      scenario_id: 'fifa_wc_ger_jpn',
+      progress: 0.4,
+      current_phase: 'Degradation',
+      event_id: mockEvent.id,
     }),
   ),
   http.get(`${BASE}/evals/summary`, () => HttpResponse.json({ agents: [] })),

@@ -60,13 +60,15 @@ export const test = base.extend<{ authMode: AuthMode }>({
           latency_ms: 50,
         });
       }
+      // Live Event resolves eventId only from an engaged simulation — idle
+      // clears the dashboard. Default to running so panel specs see KPIs/agents.
       if (method === 'GET' && path === '/simulation/status') {
         return json({
-          status: 'idle',
-          scenario_id: null,
-          progress: 0,
-          current_phase: '',
-          event_id: null,
+          status: 'running',
+          scenario_id: 'fifa_wc_ger_jpn',
+          progress: 0.4,
+          current_phase: 'Degradation',
+          event_id: mockPayloads.event.id,
         });
       }
       if (method === 'GET' && path === '/simulation/scenarios') {

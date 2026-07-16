@@ -30,7 +30,7 @@ test.describe('Agent Activity Panel', () => {
     await expect(page.getByText('Agent System')).toBeVisible({ timeout: 10_000 });
     await expect(page.getByText('detector')).toBeVisible();
     await expect(page.getByText('diagnostician')).toBeVisible();
-    await expect(page.getByRole('link', { name: /view details/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /agents/i })).toBeVisible();
   });
 
   test('shows empty state when no activity', async ({ page }) => {
