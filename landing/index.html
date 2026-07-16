@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stromwart — Autonomous QoE Intelligence for Live Streaming</title>
+    <meta
+      name="description"
+      content="Predict, diagnose, remediate, and verify live-streaming quality degradation with a deterministic OODA multi-agent loop."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="./">STROMWART</a>
+      <nav>
+        <a href="https://github.com/SwaggyXO/stromwart">GitHub</a>
+        <a class="btn" href="https://github.com/SwaggyXO/stromwart#quick-start">Run locally</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Visual walkthrough · Talent Hack demo</p>
+        <h1>Autonomous QoE intelligence for live streaming at World Cup scale</h1>
+        <p class="lede">
+          Stromwart predicts degradation, diagnoses root cause, proposes policy-gated
+          mitigations, and verifies recovery — before viewers churn.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="https://github.com/SwaggyXO/stromwart">View repository</a>
+          <a class="btn ghost" href="#walkthrough">See the walkthrough</a>
+        </div>
+        <p class="note">
+          This page is a static demo tour (screenshots). The interactive product runs via
+          <code>docker compose</code> + local backend/frontend — same REST path for simulation and live ingest.
+        </p>
+      </section>
+
+      <section class="grid-2" id="loop">
+        <div>
+          <h2>The problem</h2>
+          <p>
+            At peak live events, platforms notice QoE failures only after users leave.
+            Threshold alerts are noisy and rarely produce a safe, verified fix.
+          </p>
+        </div>
+        <div>
+          <h2>The loop</h2>
+          <ol class="steps">
+            <li><strong>Detect</strong> — anomalies on telemetry &amp; forecasts</li>
+            <li><strong>Diagnose</strong> — root-cause across CDN / network / client</li>
+            <li><strong>Mitigate</strong> — deterministic playbooks + guardrails</li>
+            <li><strong>Verify</strong> — closed-loop KPI check that the fix worked</li>
+          </ol>
+          <p class="muted">
+            Core OODA path is deterministic. LLMs (Ollama / Groq / Gemini / OpenAI / Anthropic)
+            are optional enrichment.
+          </p>
+        </div>
+      </section>
+
+      <section id="walkthrough">
+        <h2>Product walkthrough</h2>
+        <p class="section-lede">
+          Captured from the live-ops UI against a FIFA-style simulation scenario (mocked Auth0 + API for deterministic shots).
+        </p>
+
+        <figure class="shot">
+          <img
+            src="./assets/01-live-event.png"
+            alt="Live Event dashboard with KPIs for a FIFA World Cup simulation"
+            width="1440"
+            height="900"
+            loading="eager"
+          />
+          <figcaption>
+            <span class="cap-num">01</span>
+            Live Event dashboard — real-time KPIs while a demo simulation is engaged.
+          </figcaption>
+        </figure>
+
+        <figure class="shot">
+          <img
+            src="./assets/02-forecast-alerts.png"
+            alt="Forecast chart and alert feed on the Live Event page"
+            width="1440"
+            height="900"
+            loading="lazy"
+          />
+          <figcaption>
+            <span class="cap-num">02</span>
+            Quantile forecast (p10–p90) plus alert feed — risk before the stall cascade.
+          </figcaption>
+        </figure>
+
+        <figure class="shot">
+          <img
+            src="./assets/03-agent-system.png"
+            alt="Agent System summary strip on the Live Event page"
+            width="1440"
+            height="900"
+            loading="lazy"
+          />
+          <figcaption>
+            <span class="cap-num">03</span>
+            Agent System strip — Detector → Diagnostician → Mitigator → Verifier success rates.
+          </figcaption>
+        </figure>
+
+        <figure class="shot">
+          <img
+            src="./assets/04-incident-detail.png"
+            alt="Incident detail with hypothesis and remediation proposal"
+            width="1440"
+            height="900"
+            loading="lazy"
+          />
+          <figcaption>
+            <span class="cap-num">04</span>
+            Incident detail — hypothesis, evidence, and a policy-gated remediation proposal.
+          </figcaption>
+        </figure>
+
+        <figure class="shot">
+          <img
+            src="./assets/05-agents.png"
+            alt="Agents page showing OODA specialist definitions"
+            width="1440"
+            height="900"
+            loading="lazy"
+          />
+          <figcaption>
+            <span class="cap-num">05</span>
+            Agents page — specialist roles, eval traces, and pipeline visibility.
+          </figcaption>
+        </figure>
+
+        <figure class="shot">
+          <img
+            src="./assets/06-settings.png"
+            alt="Settings Data Sources tab with Demo Scenario active"
+            width="1440"
+            height="900"
+            loading="lazy"
+          />
+          <figcaption>
+            <span class="cap-num">06</span>
+            Settings — LLM providers optional; Demo Scenario is the Phase 1 data source.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="stack" id="stack">
+        <h2>Stack</h2>
+        <ul>
+          <li>FastAPI + TimescaleDB/Postgres telemetry &amp; feature pipeline</li>
+          <li>LightGBM QoE scoring + conformalized quantile forecasting</li>
+          <li>Hand-rolled OODA supervisor (no agent frameworks)</li>
+          <li>React live ops UI with SSE updates</li>
+          <li>Eval harness + append-only audit trail</li>
+        </ul>
+      </section>
+
+      <section class="cta-band">
+        <h2>Reproduce the interactive demo</h2>
+        <pre><code>git clone https://github.com/SwaggyXO/stromwart.git
+cd stromwart
+docker compose up -d postgres
+cd backend &amp;&amp; uv sync &amp;&amp; uv run alembic upgrade head
+uv run uvicorn stromwart.app:app --reload --port 8000
+# new terminal
+cd frontend &amp;&amp; npm install &amp;&amp; npm run dev</code></pre>
+        <p>
+          Start a simulation scenario from the Live Event page to watch detect → diagnose → mitigate → verify.
+        </p>
+        <a class="btn primary" href="https://github.com/SwaggyXO/stromwart#quick-start">Full Quick Start</a>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        <strong>STROMWART</strong> · MIT License ·
+        <a href="https://github.com/SwaggyXO/stromwart">github.com/SwaggyXO/stromwart</a>
+      </p>
+      <p class="muted">
+        Static walkthrough only. Redis is listed in compose for future use; the active datastore is Postgres.
+      </p>
+    </footer>
+  </body>
+</html>

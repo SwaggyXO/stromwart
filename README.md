@@ -13,6 +13,7 @@
 <br/>
 
 [![CI](https://github.com/SwaggyXO/stromwart/actions/workflows/ci.yml/badge.svg)](https://github.com/SwaggyXO/stromwart/actions/workflows/ci.yml)
+[![Walkthrough](https://img.shields.io/badge/demo-visual%20walkthrough-3dd6c6)](https://swaggyxo.github.io/stromwart/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
@@ -75,6 +76,21 @@ During high-stakes events (FIFA World Cup, live concerts, product launches), a 3
 | **Auth** | Auth0 |
 | **Infra** | Docker Compose, PostgreSQL + TimescaleDB, Redis |
 | **CI** | GitHub Actions (lint, typecheck, test, build) |
+
+---
+
+## Visual walkthrough
+
+Judges / reviewers: open the static product tour (no Auth0 or local stack required):
+
+**https://swaggyxo.github.io/stromwart/**
+
+Interactive demo still needs a local compose + Auth0 setup (see Quick Start). Screenshots are regenerated with:
+
+```bash
+cd frontend
+npm run capture:demo
+```
 
 ---
 
@@ -158,10 +174,7 @@ Based on industry benchmarks and platform-scale modeling:
 
 ## Screenshots
 
-<!-- Add screenshots under docs/screenshots/ when available -->
-<!-- ![Dashboard](docs/screenshots/dashboard.png) -->
-<!-- ![Agents](docs/screenshots/agents.png) -->
-<!-- ![Settings](docs/screenshots/settings.png) -->
+See the [visual walkthrough](https://swaggyxo.github.io/stromwart/) (GitHub Pages). Source images live under `landing/assets/`.
 
 ---
 

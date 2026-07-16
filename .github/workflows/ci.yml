@@ -98,8 +98,8 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      # live-contract.spec.ts needs a running API; skip in CI (mocked suite covers UX)
-      - run: npx playwright test --project=chromium --grep-invert "Live API contract"
+      # live-contract needs a running API; demo capture is manual (CAPTURE_DEMO=1)
+      - run: npx playwright test --project=chromium --grep-invert "Live API contract|Demo screenshot capture"
     env:
       CI: true
 

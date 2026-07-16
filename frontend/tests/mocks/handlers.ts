@@ -80,13 +80,16 @@ const mockProposals = [
   },
 ];
 
-const mockForecast = Array.from({ length: 12 }, (_, i) => ({
-  timestamp: new Date(Date.UTC(2026, 6, 15, 20, i * 5)).toISOString(),
-  p10: 3.5 + (i % 3) * 0.1,
-  p50: 4.0 + (i % 3) * 0.1,
-  p90: 4.5 + (i % 2) * 0.1,
-  actual: i < 6 ? 4.1 + (i % 2) * 0.1 : undefined,
-}));
+const mockForecast = Array.from({ length: 12 }, (_, i) => {
+  const base = 0.12 + i * 0.035 + (i % 3) * 0.02;
+  return {
+    timestamp: new Date(Date.UTC(2026, 6, 15, 20, i * 5)).toISOString(),
+    p10: Math.round((base * 0.7) * 1000) / 1000,
+    p50: Math.round(base * 1000) / 1000,
+    p90: Math.round((base * 1.45) * 1000) / 1000,
+    actual: i < 6 ? Math.round((base * 0.95) * 1000) / 1000 : undefined,
+  };
+});
 
 const mockSessions = Array.from({ length: 20 }, (_, i) => ({
   session_id: `sess_${String(i).padStart(3, '0')}`,

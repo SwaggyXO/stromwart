@@ -11,7 +11,8 @@
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
-    "test:contract": "playwright test tests/live-contract.spec.ts --project=chromium"
+    "test:contract": "playwright test tests/live-contract.spec.ts --project=chromium",
+    "capture:demo": "node scripts/run-capture-demo.mjs"
   },
   "dependencies": {
     "@astryxdesign/cli": "^0.1.3",
