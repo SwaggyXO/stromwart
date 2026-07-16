@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+.env
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+.npm
+.pnp.*
+
+# IDE
+.cursor/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Artifacts (generated, not committed)
+backend/artifacts/
+backend/data/raw/
+backend/data/*.csv
+settings.yaml
+backend/settings.yaml
+*.pem
+.cloudflared/
+
+# Test output
+coverage/
+htmlcov/
+.coverage
+test-results/
+playwright-report/
+
+# Docker
+.docker/
+
+# Misc
+*.log
+*.tmp

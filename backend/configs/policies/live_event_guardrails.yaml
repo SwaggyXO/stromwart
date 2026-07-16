@@ -1,0 +1,7 @@
+maximum_prediction_interval_width: 1.0
+maximum_blast_radius_sessions: 100000
+minimum_confidence: 0.7
+high_risk_approval_threshold: 0.8
+protected_event_phases:
+  - kickoff
+  - final_minutes

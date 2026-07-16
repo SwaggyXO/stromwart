@@ -1,0 +1,5 @@
+allowed_actions:
+  - increase_cdn_capacity
+  - adjust_traffic_routing
+  - recommend_abr_profile
+  - investigate_only

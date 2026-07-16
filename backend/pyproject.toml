@@ -1,0 +1,57 @@
+[project]
+name = "stromwart"
+version = "0.1.0"
+description = "Live-event QoE detection, investigation, and simulation backend"
+requires-python = ">=3.12"
+dependencies = [
+  "alembic>=1.16",
+  "asyncpg>=0.30",
+  "fastapi>=0.116",
+  "httpx>=0.28",
+  "joblib>=1.4",
+  "lightgbm>=4.6",
+  "mapie>=1.2",
+  "numpy>=2.0",
+  "pandas>=2.2",
+  "pydantic>=2.11",
+  "pydantic-settings>=2.10",
+  "PyYAML>=6.0",
+  "scikit-learn>=1.9",
+  "sqlalchemy>=2.0",
+  "uvicorn[standard]>=0.35",
+]
+
+[dependency-groups]
+dev = [
+  "mypy>=1.17",
+  "pytest>=8.4",
+  "pytest-asyncio>=1.1",
+  "pytest-cov>=6.2",
+  "ruff>=0.12",
+  "types-PyYAML>=6.0.12.20250915",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src"
+
+[[tool.mypy.overrides]]
+module = "joblib"
+ignore_missing_imports = true
+
+[build-system]
+requires = ["uv_build>=0.11.28,<0.12"]
+build-backend = "uv_build"
