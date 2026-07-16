@@ -90,7 +90,7 @@ test.describe('Onboarding Tour', () => {
     await expect(page.getByText('Real-Time KPIs')).toBeVisible({ timeout: 5000 });
 
     await page.getByRole('button', { name: /next/i }).click();
-    await expect(page.getByText('QoE Forecast')).toBeVisible();
+    await expect(page.getByText('QoE Forecast', { exact: true })).toBeVisible();
 
     await page.getByRole('button', { name: /next/i }).click();
     await expect(page.getByText('3/6')).toBeVisible();

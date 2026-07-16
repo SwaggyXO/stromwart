@@ -57,7 +57,7 @@ test.describe('Settings Page', () => {
     await page.getByRole('button', { name: /^Data Sources$/i }).click();
     await expect(page.getByText(/only available data source during phase 1/i)).toBeVisible();
     await expect(page.getByText('Active', { exact: true })).toBeVisible();
-    await expect(page.getByText('Coming soon')).toBeVisible();
+    await expect(page.getByText('Coming soon').first()).toBeVisible();
   });
 
   test('test connection failure shows toast not raw JSON', async ({ page }) => {
