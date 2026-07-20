@@ -5,7 +5,7 @@
 If you discover a security vulnerability, please report it responsibly:
 
 1. **Do NOT** open a public GitHub issue
-2. Email: [devashish@stromwart.dev] (or open a private advisory)
+2. Email: [hey.devashish.soni@gmail.com] (or open a private advisory)
 3. Include: description, reproduction steps, potential impact
 
 We will acknowledge within 48 hours and provide a fix timeline.
